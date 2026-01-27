@@ -4,11 +4,14 @@ import {
     ChevronRight, ChevronLeft, Camera, Upload,
     MapPin, Phone, Mail, CreditCard, Briefcase, Heart,
     Mars,
-    Venus
+    Venus,
+    AlertCircle
 } from 'lucide-react';
 import PatientRegistration from '@/models/dtos/CreateUser/PatientRegistration';
 import PanelSelect from '@/components/Common/Selection/PanelSelect';
 import { cutImageAndSetBase64 } from '@/utils/imageUtil';
+import { STYLE_ROOT } from '@/styles/styleGeneric';
+import ButtonGeneric from '@/components/Common/Button/ButtonGeneric';
 
 const options = [
     {
@@ -32,6 +35,7 @@ const options = [
 const UserForm = ({ formData, setFormData, onSave }) => {
     const [step, setStep] = useState(1);
     const fileInputRef = useRef(null);
+    const [errors, setErrors] = useState({});
 
     const totalSteps = formData.Sexo === "Femenino" ? 4 : 3;
     const isFemale = formData.Sexo === "Femenino";
@@ -68,10 +72,6 @@ const UserForm = ({ formData, setFormData, onSave }) => {
         const asdasd = formData;
     };
 
-    const labelStyle = "block text-xs font-semibold text-slate-500  tracking-wider mb-1.5 ml-1";
-    const inputStyle = "w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-slate-700 placeholder:text-slate-400";
-    const cardStyle = "p-5 rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-md transition-shadow";
-
     const roles = [
         { id: 1, name: "Administrador" },
         { id: 2, name: "Paciente" },
@@ -82,18 +82,40 @@ const UserForm = ({ formData, setFormData, onSave }) => {
         updateField('Sexo', value)
     }
 
+    const validateFields = () => {
+        const newErrors = {};
+        if (!formData.Name.trim()) newErrors.Name = "El nombre es obligatorio";
+        if (!formData.FirstSurname.trim()) newErrors.FirstSurname = "El apellido paterno es obligatorio";
+        if (!formData.IdentityCard.trim()) newErrors.IdentityCard = "El CI es obligatorio";
+        if (!formData.BirthDate) newErrors.BirthDate = "La fecha de nacimiento es necesaria";
+        if (!formData.Phone.trim()) newErrors.Phone = "El teléfono es obligatorio";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const onSaveInternal = () => {
+        if (validateFields()) {
+            console.log("Datos listos para enviar:", formData);
+            onSave();
+        } else {
+            setStep(1);
+        }
+    };
+
+    const labelStyle = "block text-xs font-semibold text-slate-500  tracking-wider mb-1 ml-1";
+    const inputStyle = (fieldName) => `w-full px-2 py-1.5 bg-slate-50 border ${errors[fieldName] ? 'border-red-400 ring-2 ring-red-50' : 'border-slate-200'} rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-slate-700 placeholder:text-slate-400`;
+    const cardStyle = "p-5 rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-md transition-shadow";
+
     return (
         <div className="flex flex-col h-full overflow-hidden">
             <div className="mb-5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-2 md:px-12 rounded-3xl shadow-sm border border-slate-100 flex-shrink-0">
                 <div>
-                    {/* <h1 className="text-2xl font-black text-slate-800 tracking-tight">Registro de Paciente</h1> */}
-                    {/* <h1 className="text-3xl font-black text-slate-800 tracking-tight"> */}
                     <h1 className="text-3xl font-black text-[#052a3d] tracking-tight">
                         {/* Registro de <span className="text-cyan-600">Pacientes</span> */}
                         {/* 117192  052a3d  614943*/}
                         Registro de <span className="text-[#19d1e6]">Pacientes</span>
                     </h1>
-                    {/* <p className="text-slate-500 text-sm">Complete el expediente clínico del nuevo ingreso.</p> */}
                 </div>
                 <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-200">
                     {[1, 2, 3, 4].map((num) => (
@@ -116,12 +138,12 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                 <div className="flex-1 overflow-y-auto p-8 md:px-12 custom-scrollbar">
                     {/* PASO 1: Identidad */}
                     {step === 1 && (
-                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-3">
                             <div className="flex flex-col md:flex-row gap-10">
                                 {/* Image Upload Section */}
                                 <div className="flex flex-col items-center gap-4">
                                     <div className="relative group">
-                                        <div className="w-32 h-32 rounded-3xl bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center overflow-hidden transition-all group-hover:border-blue-400">
+                                        <div className="w-28 h-28 rounded-3xl bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center overflow-hidden transition-all group-hover:border-blue-400">
                                             {formData.Image ? (
                                                 <img src={formData.Image} alt="Profile" className="w-full h-full object-cover" />
                                             ) : (
@@ -130,48 +152,52 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                                         </div>
                                         <button
                                             onClick={() => fileInputRef.current?.click()}
-                                            className="absolute -bottom-2 -right-2 p-2 bg-blue-600 text-white rounded-xl shadow-lg hover:bg-blue-700 transition-transform active:scale-90"
+                                            className={`absolute -bottom-2 -right-2 p-2  rounded-xl shadow-lg  transition-transform active:scale-90 ${STYLE_ROOT.primary}`}
                                         >
                                             <Upload size={16} />
                                         </button>
                                     </div>
                                     <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageChange} />
-                                    <span className="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Foto de Perfil</span>
+                                    {/* <span className="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Foto de Perfil</span> */}
                                 </div>
 
                                 {/* Fields Grid */}
                                 <div className='flex flex-col w-full'>
-                                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        <div className="lg:col-span-1">
-                                            <label className={labelStyle}>Nombres *</label>
-                                            <input type="text" className={inputStyle} value={formData.Name} onChange={e => updateField('Name', e.target.value)} placeholder="Juan Pablo" />
+                                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-2">
+                                        <div className="lg:col-span-1 ">
+                                            <label className={labelStyle}>Nombres <span className="text-red-500">*</span></label>
+                                            <input type="text" className={inputStyle('Name')} value={formData.Name} onChange={e => updateField('Name', e.target.value)} placeholder="Kevin Matthew" />
+                                            {errors.Name && <p className="text-red-500 text-[10px] mt-1 ml-1 flex items-center gap-1"><AlertCircle size={10} /> {errors.Name}</p>}
                                         </div>
                                         <div>
-                                            <label className={labelStyle}>Apellido Paterno *</label>
-                                            <input type="text" className={inputStyle} value={formData.FirstSurname} onChange={e => updateField('FirstSurname', e.target.value)} />
+                                            <label className={labelStyle}>Apellido Paterno <span className="text-red-500">*</span></label>
+                                            <input type="text" className={inputStyle('FirstSurname')} value={formData.FirstSurname} onChange={e => updateField('FirstSurname', e.target.value)} placeholder="Sacaca" />
                                         </div>
                                         <div>
                                             <label className={labelStyle}>Apellido Materno</label>
-                                            <input type="text" className={inputStyle} value={formData.SecondSurname} onChange={e => updateField('SecondSurname', e.target.value)} />
+                                            <input type="text" className={inputStyle()} value={formData.SecondSurname} onChange={e => updateField('SecondSurname', e.target.value)} placeholder="Carrasco" />
                                         </div>
                                     </div>
                                     <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                         <div className="lg:col-span-1">
-                                            <label className={labelStyle}>Cédula de Identidad</label>
+                                            <label className={labelStyle}>Cédula de Identidad <span className="text-red-500">*</span></label>
                                             <div className="relative">
                                                 <CreditCard className="absolute left-3 top-3 text-slate-400" size={18} />
-                                                <input type="text" className={`${inputStyle} pl-10`} value={formData.IdentityCard} onChange={e => updateField('IdentityCard', e.target.value)} />
+                                                <input type="text" className={`${inputStyle('IdentityCard')} pl-10`} value={formData.IdentityCard} onChange={e => updateField('IdentityCard', e.target.value)} placeholder="1234567-LP" />
+                                                {errors.IdentityCard && <p className="text-red-500 text-[10px] mt-1 ml-1 flex items-center gap-1"><AlertCircle size={10} /> {errors.IdentityCard}</p>}
                                             </div>
                                         </div>
                                         <div>
-                                            <label className={labelStyle}>Fecha Nacimiento</label>
-                                            <input type="date" className={inputStyle} value={formData.BirthDate} onChange={e => updateField('BirthDate', e.target.value)} />
+                                            <label className={labelStyle}>Fecha Nacimiento <span className="text-red-500">*</span></label>
+                                            <input type="date" className={inputStyle('BirthDate')} value={formData.BirthDate} onChange={e => updateField('BirthDate', e.target.value)} />
+                                            {errors.BirthDate && <p className="text-red-500 text-[10px] mt-1 ml-1 flex items-center gap-1"><AlertCircle size={10} /> {errors.BirthDate}</p>}
                                         </div>
                                         <div>
-                                            <label className={labelStyle}>Teléfono / Celular</label>
+                                            <label className={labelStyle}>Teléfono / Celular <span className="text-red-500">*</span></label>
                                             <div className="relative">
                                                 <Phone className="absolute left-3 top-3 text-slate-400" size={18} />
-                                                <input type="text" className={`${inputStyle} pl-10`} value={formData.Phone} onChange={e => updateField('Phone', e.target.value)} />
+                                                <input type="text" className={`${inputStyle('Phone')} pl-10`} value={formData.Phone} onChange={e => updateField('Phone', e.target.value)} placeholder="+591 70000000" />
+                                                {errors.Phone && <p className="text-red-500 text-[10px] mt-1 ml-1 flex items-center gap-1"><AlertCircle size={10} /> {errors.Phone}</p>}
                                             </div>
                                         </div>
                                     </div>
@@ -184,7 +210,7 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
                                     <label className={labelStyle}>Rol</label>
-                                    <select className={inputStyle} value={formData.RolId} onChange={e => updateField('RolId', parseInt(e.target.value))}>
+                                    <select className={inputStyle()} value={formData.RolId} onChange={e => updateField('RolId', parseInt(e.target.value))}>
                                         {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                                     </select>
                                 </div>
@@ -192,14 +218,14 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                                     <label className={labelStyle}>Lugar de Nacimiento</label>
                                     <div className="relative">
                                         <MapPin className="absolute left-3 top-3 text-slate-400" size={18} />
-                                        <input type="text" className={`${inputStyle} pl-10`} value={formData.PlaceOfBirth} onChange={e => updateField('PlaceOfBirth', e.target.value)} />
+                                        <input type="text" className={`${inputStyle()} pl-10`} value={formData.PlaceOfBirth} onChange={e => updateField('PlaceOfBirth', e.target.value)} placeholder="Ej. La Paz, Bolivia" />
                                     </div>
                                 </div>
                                 <div>
                                     <label className={labelStyle}>Ocupación</label>
                                     <div className="relative">
                                         <Briefcase className="absolute left-3 top-3 text-slate-400" size={18} />
-                                        <input type="text" className={`${inputStyle} pl-10`} value={formData.Occupation} onChange={e => updateField('Occupation', e.target.value)} />
+                                        <input type="text" className={`${inputStyle()} pl-10`} value={formData.Occupation} onChange={e => updateField('Occupation', e.target.value)} placeholder="Ej. Ingeniero Civil" />
                                     </div>
                                 </div>
                             </div>
@@ -207,11 +233,11 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div className="md:col-span-2">
                                     <label className={labelStyle}>Dirección de Domicilio</label>
-                                    <input type="text" className={inputStyle} value={formData.Address} onChange={e => updateField('Address', e.target.value)} />
+                                    <input type="text" className={inputStyle()} value={formData.Address} onChange={e => updateField('Address', e.target.value)} placeholder="Ej. Av. Siempre Viva #123, Zona Central" />
                                 </div>
                                 <div>
                                     <label className={labelStyle}>Estado Civil</label>
-                                    <select className={inputStyle} value={formData.MaritalStatus} onChange={e => updateField('MaritalStatus', e.target.value)}>
+                                    <select className={inputStyle()} value={formData.MaritalStatus} onChange={e => updateField('MaritalStatus', e.target.value)}>
                                         <option value="S/N">Seleccionar...</option>
                                         <option value="Soltero/a">Soltero/a</option>
                                         <option value="Casado/a">Casado/a</option>
@@ -226,7 +252,7 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                                     <label className={labelStyle}>Correo Electrónico</label>
                                     <div className="relative">
                                         <Mail className="absolute left-3 top-3 text-slate-400" size={18} />
-                                        <input type="email" className={`${inputStyle} pl-10`} value={formData.Email} onChange={e => updateField('Email', e.target.value)} placeholder="correo@ejemplo.com" />
+                                        <input type="email" className={`${inputStyle()} pl-10`} value={formData.Email} onChange={e => updateField('Email', e.target.value)} placeholder="correo@ejemplo.com" />
                                     </div>
                                 </div>
                                 <div>
@@ -239,7 +265,7 @@ const UserForm = ({ formData, setFormData, onSave }) => {
 
                     {/* PASO 2: Hábitos */}
                     {step === 2 && (
-                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
+                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-3">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className={cardStyle}>
                                     <div className="flex items-center justify-between mb-4">
@@ -421,16 +447,24 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                     </div>
 
                     {step < totalSteps ? (
-                        <button
+                        // <button
+                        //     onClick={() => setStep(s => s + 1)}
+                        //     className="flex items-center gap-2 px-8 py-3 bg-slate-900 text-white rounded-2xl font-bold hover:bg-black transition-all shadow-lg active:scale-95"
+                        // >
+                        //     Siguiente
+                        //     <ChevronRight size={20} />
+                        // </button>
+                        <ButtonGeneric
+                            variant="primary"
                             onClick={() => setStep(s => s + 1)}
-                            className="flex items-center gap-2 px-8 py-3 bg-slate-900 text-white rounded-2xl font-bold hover:bg-black transition-all shadow-lg active:scale-95"
                         >
                             Siguiente
                             <ChevronRight size={20} />
-                        </button>
+                        </ButtonGeneric>
                     ) : (
                         <button
-                            onClick={onSave}
+                            // onClick={onSave}
+                            onClick={onSaveInternal}
                             className="flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 active:scale-95"
                         >
                             <CheckCircle2 size={20} />

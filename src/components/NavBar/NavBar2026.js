@@ -10,6 +10,7 @@ import {
     Settings,
     LogOut
 } from "lucide-react";
+import { STYLE_ROOT } from "@/styles/styleGeneric";
 
 const NavItem = ({ Icon, label, isActive, path }) => {
     return (
@@ -20,7 +21,7 @@ const NavItem = ({ Icon, label, isActive, path }) => {
             className={`
         relative flex items-center p-3 my-1.5 rounded-2xl transition-all duration-300 w-full cursor-pointer group
         ${isActive
-                    ? "bg-[#19D1E6] text-white shadow-lg "
+                    ? "shadow-lg " + STYLE_ROOT.navbarButton
                     : "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
                 }
       `}
@@ -60,7 +61,7 @@ const NavBar2026 = () => {
         /* Contenedor envolvente para simular el fondo de la app y el margen del navbar */
         <>
             {/* Navbar como "Card" Flotante */}
-            <aside className="w-[20%] h-full bg-white rounded-3xl shadow-xl  flex flex-col p-6 border border-white">
+            <aside className={`w-[20%] h-full bg-white shadow-xl  flex flex-col p-6 border border-white ${STYLE_ROOT.roundedPanelMain}`}>
 
                 {/* Logo / Header */}
                 <div className="flex items-center gap-3 mb-12 px-2">

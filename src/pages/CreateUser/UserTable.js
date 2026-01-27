@@ -15,6 +15,7 @@ import {
     AlertCircle,
     ArrowLeft
 } from 'lucide-react';
+import ButtonGeneric from '@/components/Common/Button/ButtonGeneric';
 
 const UserTable = ({ patients, onAddNew }) => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -27,19 +28,13 @@ const UserTable = ({ patients, onAddNew }) => {
 
     return (
         <div className="flex flex-col h-full animate-in fade-in duration-500">
-            {/* Header de la Tabla */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                {/* <div>
-                    <h1 className="text-2xl font-black text-slate-800 tracking-tight">Listado de Pacientes</h1>
-                    <p className="text-slate-500 text-sm">Gestiona y visualiza los expedientes registrados.</p>
-                </div> */}
-                <button
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 items-center w-full">
+                <ButtonGeneric
+                    variant="primary"
                     onClick={onAddNew}
-                    className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 active:scale-95"
                 >
-                    <UserPlus size={18} />
-                    Nuevo Paciente
-                </button>
+                    Nuevo Usuario
+                </ButtonGeneric>
                 <div className="relative w-full md:flex-1">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                     <input
@@ -71,22 +66,22 @@ const UserTable = ({ patients, onAddNew }) => {
             </div> */}
 
             {/* Contenedor de Tabla */}
-            <div className="bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 flex-1 overflow-hidden flex flex-col">
+            <div className="bg-white rounded-lg border border-slate-100 shadow-xl shadow-slate-200/50 flex-1 overflow-hidden flex flex-col">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
-                        <thead>
+                        <thead className="bg-odont-primary text-odont-skyblue">
                             <tr className="border-b border-slate-50">
-                                <th className="px-6 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">Paciente</th>
-                                <th className="px-6 py-5 text-xs font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">ID Registro</th>
-                                <th className="px-6 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">Sexo</th>
-                                <th className="px-6 py-5 text-xs font-black text-slate-400 uppercase tracking-widest hidden lg:table-cell">Fecha Alta</th>
-                                <th className="px-6 py-5 text-xs font-black text-slate-400 uppercase tracking-widest text-right">Acciones</th>
+                                <th className="px-2 py-2 text-xs font-black  tracking-widest">Nombre</th>
+                                <th className="px-2 py-2 text-xs font-black  tracking-widest hidden md:table-cell">ID Registro</th>
+                                <th className="px-2 py-2 text-xs font-black  tracking-widest">Sexo</th>
+                                <th className="px-2 py-2 text-xs font-black  tracking-widest hidden lg:table-cell">Fecha Alta</th>
+                                <th className="px-2 py-2 text-xs font-black  tracking-widest text-right">Acciones</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
                             {filteredPatients.length > 0 ? filteredPatients.map((patient) => (
                                 <tr key={patient.id} className="hover:bg-slate-50/50 transition-colors group">
-                                    <td className="px-6 py-4">
+                                    <td className="px-2 ">
                                         <div className="flex items-center gap-4">
                                             <div className="w-11 h-11 rounded-2xl bg-slate-100 overflow-hidden border border-slate-200 flex-shrink-0">
                                                 {patient.Image ? (
@@ -98,7 +93,7 @@ const UserTable = ({ patients, onAddNew }) => {
                                                 )}
                                             </div>
                                             <div>
-                                                <div className="font-bold text-slate-700">{patient.Name} {patient.FirstSurname}</div>
+                                                <div className="text-sm font-bold text-slate-700">{patient.Name} {patient.FirstSurname}</div>
                                                 <div className="text-xs text-slate-400 truncate max-w-[150px]">{patient.SecondSurname || 'Sin segundo apellido'}</div>
                                             </div>
                                         </div>

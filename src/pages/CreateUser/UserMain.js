@@ -8,6 +8,8 @@ import { showToast } from '@/utils/showToast';
 import UserForm from './UserForm';
 import { cutImageAndSetBase64 } from '@/utils/imageUtil';
 import UserTable from './UserTable';
+import { STYLE_ROOT } from '@/styles/styleGeneric';
+import ButtonGeneric from '@/components/Common/Button/ButtonGeneric';
 
 /**
  * COMPONENTE: PatientForm
@@ -121,30 +123,22 @@ const UserMain = () => {
     <div className="h-full w-full font-sans flex flex-col overflow-hidden">
       {view === "userIndex" ? (
         <div className="flex flex-col h-full overflow-hidden">
-          <div className="mb-5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-2 md:px-12 rounded-3xl shadow-sm border border-slate-100 flex-shrink-0">
+          <div className={`mb-5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-2 md:px-12 shadow-sm border border-slate-100 flex-shrink-0 ${STYLE_ROOT.roundedPanelMain}`}>
             <div>
               <h1 className="text-3xl font-black text-[#052a3d] tracking-tight">
                 Pacientes
               </h1>
+              {/* <ButtonGeneric
+                variant="primary"
+                onClick={() => alert('sadasdjkljaskld')}
+              >
+                Nuevo Usuario
+              </ButtonGeneric> */}
             </div>
             <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-200">
             </div>
           </div>
-          {/* <button
-            onClick={handleNewUser}
-            className="w-full bg
-            
-            -white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-6 hover:shadow-xl hover:-translate-y-1 transition-all group"
-          >
-            <div className="p-4 bg-indigo-50 text-indigo-600 rounded-2xl group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-              <UserPlus size={28} />
-            </div>
-            <div className="text-left">
-              <h3 className="font-black text-slate-800 text-xl">Nuevo Registro</h3>
-              <p className="text-slate-400 text-sm">Abrir formulario de admisión</p>
-            </div>
-          </button> */}
-          <div className="bg-white rounded-[2rem] shadow-sm border border-slate-100 flex flex-col flex-1 overflow-hidden">
+          <div className={`bg-white shadow-sm border border-slate-100 flex flex-col flex-1 overflow-hidden ${STYLE_ROOT.roundedPanelMain}`}>
             <div className="flex-1 overflow-y-auto p-8 md:px-12 custom-scrollbar">
               <UserTable
                 patients={patients}
