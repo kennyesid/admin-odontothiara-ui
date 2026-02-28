@@ -42,6 +42,33 @@ class UserService {
         }
     }
 
+    saveOrUpdatePatient(patientData) {
+        try {
+            const patients = this.getAllPatients();
+            const index = patients.findIndex(p => p.id === patientData.id);
+
+            if (index !== -1) {
+                patients[index] = {
+                    ...patients[index],
+                    ...patientData
+                };
+            } else {
+                const newEntry = {
+                    ...patientData,
+                    id: patientData.id || crypto.randomUUID(),
+                    createdAt: new Date().toISOString()
+                };
+                patients.push(newEntry);
+            }
+
+            localStorage.setItem(this.storageKey, JSON.stringify(patients));
+            return true;
+        } catch (error) {
+            console.error("Error al persistir en localStorage:", error);
+            return false;
+        }
+    }
+
     /**
      * Limpia todos los registros (opcional).
      */

@@ -21,6 +21,7 @@ export default class PatientRegistration {
     this.IdentityCard = data.IdentityCard || "";
     this.Email = data.Email || "";
     this.Phone = data.Phone || "0";
+    this.CreatedAt = data.CreatedAt || new Date().toISOString();
     // this.State = data.State ?? true;
 
     // Sub-objetos que representan las tablas relacionadas

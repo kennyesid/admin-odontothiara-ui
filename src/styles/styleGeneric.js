@@ -1,5 +1,6 @@
 export const STYLE_ROOT = {
-    primary: " bg-odont-primary text-odont-skyblue hover:bg-odont-secondary hover:text-white ",
+    primary: " bg-odont-primary text-odont-skyblue hover:bg-odont-secondary hover:text-white  ",
+    before: " bg-odont-turquoise text-odont-gray hover:bg-odont-secondary hover:text-white ",
     card: " bg-white rounded-odont-radius p-6 shadow-sm border border-gray-100 ",
 
     // Títulos genéricos
@@ -10,6 +11,6 @@ export const STYLE_ROOT = {
 
     // Inputs estándar
     input: " w-full border-2 border-gray-100 p-2 rounded-md focus:border-odont-secondary outline-none transition-colors ",
-    roundedPanelMain: " rounded-2xl ",
+    roundedPanelMain: " rounded-3xl ",
     navbarButton: " bg-odont-primary text-odont-skyblue hover:bg-odont-secondary hover:text-white rounded-2xl "
 };

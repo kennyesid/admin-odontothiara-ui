@@ -95,9 +95,9 @@ const UserForm = ({ formData, setFormData, onSave }) => {
     };
 
     const onSaveInternal = () => {
+
         if (validateFields()) {
-            console.log("Datos listos para enviar:", formData);
-            onSave();
+            onSave(formData);
         } else {
             setStep(1);
         }
@@ -109,7 +109,7 @@ const UserForm = ({ formData, setFormData, onSave }) => {
 
     return (
         <div className="flex flex-col h-full overflow-hidden">
-            <div className="mb-5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-2 md:px-12 rounded-3xl shadow-sm border border-slate-100 flex-shrink-0">
+            <div className={`mb-5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-3 md:px-12 shadow-sm border border-slate-100 flex-shrink-0 ${STYLE_ROOT.roundedPanelMain}`}>
                 <div>
                     <h1 className="text-3xl font-black text-[#052a3d] tracking-tight">
                         {/* Registro de <span className="text-cyan-600">Pacientes</span> */}
@@ -117,16 +117,16 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                         Registro de <span className="text-[#19d1e6]">Pacientes</span>
                     </h1>
                 </div>
-                <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-200">
+                <div className="flex items-center gap-3 bg-slate-50 p-1 rounded-2xl border border-slate-200">
                     {[1, 2, 3, 4].map((num) => (
                         num <= totalSteps && (
                             <div key={num} className="flex items-center">
-                                <div className={`flex items-center justify-center w-8 h-8 rounded-xl text-sm font-bold transition-all shadow-sm ${step === num ? 'bg-[#052a3d] text-white scale-110 shadow-blue-200' :
+                                <div className={`flex items-center justify-center w-6 h-6 rounded-xl text-sm font-bold transition-all shadow-sm ${step === num ? 'bg-[#052a3d] text-white scale-110 shadow-blue-200' :
                                     step > num ? 'bg-[#117192] text-white' : 'bg-white text-slate-400 border border-slate-200'
                                     }`}>
                                     {step > num ? <CheckCircle2 size={16} /> : num}
                                 </div>
-                                {num < totalSteps && <div className={`w-4 h-0.5 mx-1 rounded-full ${step > num ? 'bg-green-500' : 'bg-slate-200'}`} />}
+                                {num < totalSteps && <div className={`w-4 h-0.2 mx-1 rounded-full ${step > num ? 'bg-green-500' : 'bg-slate-200'}`} />}
                             </div>
                         )
                     ))}
@@ -134,7 +134,8 @@ const UserForm = ({ formData, setFormData, onSave }) => {
             </div>
 
             {/* Content Area */}
-            <div className="bg-white rounded-[2rem] shadow-sm border border-slate-100 flex flex-col flex-1 overflow-hidden">
+            {/* <div className="bg-white rounded-[2rem] shadow-sm border border-slate-100 flex flex-col flex-1 overflow-hidden"> */}
+            <div className={`bg-white shadow-sm border border-slate-100 flex flex-col flex-1 overflow-hidden ${STYLE_ROOT.roundedPanelMain}`}>
                 <div className="flex-1 overflow-y-auto p-8 md:px-12 custom-scrollbar">
                     {/* PASO 1: Identidad */}
                     {step === 1 && (
@@ -432,48 +433,42 @@ const UserForm = ({ formData, setFormData, onSave }) => {
 
                 {/* Bottom Navigation */}
                 <div className="bg-slate-50 border-t border-slate-100 p-6 flex items-center justify-between">
-                    <button
-                        onClick={() => setStep(s => Math.max(1, s - 1))}
-                        disabled={step === 1}
-                        className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-bold transition-all ${step === 1 ? 'opacity-0 pointer-events-none' : 'text-slate-500 hover:bg-slate-200'
-                            }`}
-                    >
-                        <ChevronLeft size={20} />
-                        Anterior
-                    </button>
-
-                    <div className="hidden sm:block text-xs font-bold text-slate-400 uppercase tracking-widest">
-                        Expediente #{formData.Id || 'NUEVO'}
+                    <div className="w-[30%]">
+                        {!(step === 1) && (
+                            <ButtonGeneric
+                                variant="before"
+                                className="w-[30%]"
+                                onClick={() => setStep(s => s - 1)}
+                            >
+                                <ChevronLeft size={20} />
+                                Anterior
+                            </ButtonGeneric>
+                        )}
                     </div>
-
-                    {step < totalSteps ? (
-                        // <button
-                        //     onClick={() => setStep(s => s + 1)}
-                        //     className="flex items-center gap-2 px-8 py-3 bg-slate-900 text-white rounded-2xl font-bold hover:bg-black transition-all shadow-lg active:scale-95"
-                        // >
-                        //     Siguiente
-                        //     <ChevronRight size={20} />
-                        // </button>
-                        <ButtonGeneric
-                            variant="primary"
-                            onClick={() => setStep(s => s + 1)}
-                        >
-                            Siguiente
-                            <ChevronRight size={20} />
-                        </ButtonGeneric>
-                    ) : (
-                        <button
-                            // onClick={onSave}
-                            onClick={onSaveInternal}
-                            className="flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 active:scale-95"
-                        >
-                            <CheckCircle2 size={20} />
-                            Finalizar Registro
-                        </button>
-                    )}
+                    <div className="w-[30%]">
+                        {step < totalSteps ? (
+                            <ButtonGeneric
+                                variant="primary"
+                                className="w-[30%]"
+                                onClick={() => setStep(s => s + 1)}
+                            >
+                                Siguiente
+                                <ChevronRight size={20} />
+                            </ButtonGeneric>
+                        ) : (
+                            <ButtonGeneric
+                                variant="primary"
+                                className="w-[30%] gap-2"
+                                onClick={onSaveInternal}
+                            >
+                                Finalizar Registro
+                                <CheckCircle2 size={20} />
+                            </ButtonGeneric>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

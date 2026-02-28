@@ -8,10 +8,10 @@ const DentalChart = ({ onMarkTooth, markedTeeth = {} }) => {
   // Definición de los 5 puntos (caras) del diente
   const points = [
     // LÍNEAS 9-14: Nomenclatura clínica
-    { id: "distal-occlusal", pos: [-8, -6] },
-    { id: "mesial-occlusal", pos: [8, -6] },
-    { id: "distal-gingival", pos: [-8, 6] },
-    { id: "mesial-gingival", pos: [8, 6] },
+    { id: "distal-occlusal", pos: [-14, -10] },
+    { id: "mesial-occlusal", pos: [14, -10] },
+    { id: "distal-gingival", pos: [-14, 10] },
+    { id: "mesial-gingival", pos: [14, 10] },
     { id: "occlusal-center", pos: [0, 0] },
   ];
 
@@ -121,7 +121,7 @@ const DentalChart = ({ onMarkTooth, markedTeeth = {} }) => {
     const crownY = BASE_Y + offsetY;
 
     // Centro Y para los puntos (caras del diente)
-    const rectCenterY = (isUpper ? -12 : 24) + offsetY;
+    const rectCenterY = (isUpper ? -11 : 26) + offsetY;
 
     // Multiplicador para invertir el eje Y de los puntos en la arcada inferior.
     const yFlip = isUpper ? 1 : -1;
@@ -150,6 +150,9 @@ const DentalChart = ({ onMarkTooth, markedTeeth = {} }) => {
 
     const toothX = finalIndex * spacingX;
 
+    const toothWidth = 32;  // 34
+    const toothHeight = 18; // 12
+
     return (
       <g
         key={number}
@@ -160,8 +163,8 @@ const DentalChart = ({ onMarkTooth, markedTeeth = {} }) => {
         <motion.rect
           x={toothX}
           y={crownY}
-          width={24}
-          height={12}
+          width={toothWidth}
+          height={toothHeight}
           rx={3}
           fill={isHovered ? "#dbeafe" : isAdditional ? "#fffbe7" : "white"}
           stroke={marks.some((m) => m) ? "#ef4444" : "#3b82f6"}
@@ -179,7 +182,7 @@ const DentalChart = ({ onMarkTooth, markedTeeth = {} }) => {
         {points.map((point, pIdx) => (
           <motion.circle
             key={point.id}
-            cx={toothX + 12 + point.pos[0]}
+            cx={toothX + (toothWidth / 2) + point.pos[0]}
             cy={rectCenterY + point.pos[1] * yFlip}
             r={marks[pIdx] ? 5 : 4} // Tamaño original de los puntos
             fill={marks[pIdx] ? "#ef4444" : "#f3f4f6"}
@@ -198,8 +201,8 @@ const DentalChart = ({ onMarkTooth, markedTeeth = {} }) => {
 
         {/* Número del diente */}
         <text
-          x={toothX + 12}
-          y={isUpper ? crownY - 8 : crownY + 23}
+          x={toothX + (toothWidth / 2)}
+          y={isUpper ? crownY - 8 : crownY + 28}
           textAnchor="middle"
           fontSize="10"
           fontWeight="bold"

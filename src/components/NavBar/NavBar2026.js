@@ -51,8 +51,9 @@ const NavBar2026 = () => {
     const navItems = [
         { path: "/", label: "Dashboard", icon: Home },
         { path: "/createUser", label: "Usuario", icon: UserPlus },
+        // { path: "/visitPage", label: "Visita Médica", icon: UserPlus },
         { path: "/visit", label: "Visita Médica", icon: ArrowLeftRight },
-        { path: "/patients", label: "Pacientes", icon: User },
+        // { path: "/patients", label: "Pacientes", icon: User },
         { path: "/history", label: "Historial", icon: Search },
         { path: "/calendar", label: "Citas", icon: CalendarDays },
     ];
@@ -114,7 +115,7 @@ const NavBar2026 = () => {
                             DR
                         </div>
                         <div className="overflow-hidden">
-                            <p className="text-xs font-bold text-slate-800 truncate">Dr. Rodríguez</p>
+                            <p className="text-xs font-bold text-slate-800 truncate">Dr. Sacaca</p>
                             <p className="text-[10px] text-slate-500 truncate">Administrador</p>
                         </div>
                     </div>

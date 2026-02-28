@@ -11,7 +11,6 @@ module.exports = {
         'odont-turquoise': '#19D1E6',    // Verde para estados positivos
         'odont-gray': '#614943',   // Gris muy claro para fondos
         'odont-skyblue': '#bde0eeff',
-        'odont-skyblue': '#bde0eeff',
       }
     },
   },

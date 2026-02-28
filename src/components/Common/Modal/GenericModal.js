@@ -11,16 +11,16 @@ import { X, Save, RotateCcw } from 'lucide-react';
  * @param {React.ReactNode} children - Contenido dinámico (Formularios).
  * @param {string} saveText - Texto personalizado para el botón de guardar.
  */
-const GenericModal = ({ 
-  isOpen, 
-  onClose, 
-  onSave, 
-  title = "Formulario", 
-  children, 
+const GenericModal = ({
+  isOpen,
+  onClose,
+  onSave,
+  title = "Formulario",
+  children,
   saveText = "Guardar Cambios",
-  isSaving = false 
+  isSaving = false
 }) => {
-  
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -42,13 +42,13 @@ const GenericModal = ({
             className="fixed inset-0 z-[70] flex items-center justify-center pointer-events-none p-4"
           >
             <div className="bg-white w-full max-w-5xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col pointer-events-auto border border-gray-100">
-              
+
               {/* Cabecera del Modal */}
               <div className="px-6 py-4 bg-gradient-to-r from-cyan-600 to-sky-600 text-white flex justify-between items-center">
                 <h3 className="text-xl font-bold flex items-center gap-2">
                   {title}
                 </h3>
-                <button 
+                <button
                   onClick={onClose}
                   className="p-1 hover:bg-white/20 rounded-full transition-colors"
                 >
@@ -71,15 +71,15 @@ const GenericModal = ({
                   <RotateCcw size={18} />
                   Cancelar
                 </button>
-                
+
                 <button
                   type="button"
                   onClick={onSave}
                   disabled={isSaving}
                   className={`
                     px-6 py-2.5 rounded-xl font-bold text-white shadow-lg flex items-center gap-2 transition-all
-                    ${isSaving 
-                      ? 'bg-gray-400 cursor-not-allowed' 
+                    ${isSaving
+                      ? 'bg-gray-400 cursor-not-allowed'
                       : 'bg-cyan-600 hover:bg-cyan-700 active:scale-95 shadow-cyan-200'}
                   `}
                 >

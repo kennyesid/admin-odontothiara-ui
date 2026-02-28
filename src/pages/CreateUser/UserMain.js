@@ -1,84 +1,75 @@
+// 1. React y librerías externas
 import React, { useEffect, useState } from 'react';
-import { UserPlus, X, Save, ClipboardList, User, Heart, Baby } from 'lucide-react';
-import GenericModal from '@/components/Common/Modal/GenericModal';
-import PatientForm from './PatientForm';
-import GenericModalWithControl from '@/components/Common/Modal/GenericModalWithControl';
+// 2. Servicios y Utilidades (Capa de datos)
 import { userService } from '@/services/user/UserService';
 import { showToast } from '@/utils/showToast';
+// 3. Componentes de la aplicación
 import UserForm from './UserForm';
-import { cutImageAndSetBase64 } from '@/utils/imageUtil';
-import UserTable from './UserTable';
-import { STYLE_ROOT } from '@/styles/styleGeneric';
+import UserDataTable from '@/components/DataTable/UserDataTable';
 import ButtonGeneric from '@/components/Common/Button/ButtonGeneric';
+// 4. Estilos y Constantes
+import { STYLE_ROOT } from '@/styles/styleGeneric';
+import { INITIAL_PATIENT_STATE } from '@/constants/UserConstants';
 
-/**
- * COMPONENTE: PatientForm
- * Formulario que recibe estado del padre (Controlled Component)
- */
-
-/**
- * COMPONENTE: UserMain
- */
 const UserMain = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [levelSection, setLevelSection] = useState(1);
   const [view, setView] = useState("userIndex");
   const [patients, setPatients] = useState([]);
-  const [patientData, setPatientData] = useState({
-    Id: 0,
-    RolId: 2,
-    Name: '',
-    FirstSurname: '',
-    SecondSurname: '',
-    Image: '',
-    Age: 0,
-    Sexo: 'Masculino',
-    BirthDate: new Date().toISOString().split('T')[0],
-    PlaceOfBirth: '',
-    Occupation: '',
-    MaritalStatus: 'S/N',
-    Address: '',
-    IdentityCard: '',
-    Email: '',
-    Phone: '',
+  const [patientData, setPatientData] = useState(INITIAL_PATIENT_STATE);
+  // const [patientData, setPatientData] = useState({
+  //   Id: 0,
+  //   RolId: 2,
+  //   Name: '',
+  //   FirstSurname: '',
+  //   SecondSurname: '',
+  //   Image: '',
+  //   Age: 0,
+  //   Sexo: 'Masculino',
+  //   BirthDate: new Date().toISOString().split('T')[0],
+  //   PlaceOfBirth: '',
+  //   Occupation: '',
+  //   MaritalStatus: 'S/N',
+  //   Address: '',
+  //   IdentityCard: '',
+  //   Email: '',
+  //   Phone: '',
 
-    // QuestionPersonal
-    personalQuestions: {
-      Smokes: false,
-      SmokingYears: 0,
-      DrinksAlcohol: false,
-      AlcoholDescription: '',
-      Bruxism: false,
-      BruxismDescription: '',
-      ChewsCoca: false,
-      CocaDescription: '',
-      State: true
-    },
+  //   // QuestionPersonal
+  //   personalQuestions: {
+  //     Smokes: false,
+  //     SmokingYears: 0,
+  //     DrinksAlcohol: false,
+  //     AlcoholDescription: '',
+  //     Bruxism: false,
+  //     BruxismDescription: '',
+  //     ChewsCoca: false,
+  //     CocaDescription: '',
+  //     State: true
+  //   },
 
-    // QuestionPathological
-    pathologicalQuestions: {
-      Anemia: false,
-      Diabetes: false,
-      HeartDisease: false,
-      Allergies: false,
-      AllergiesDescription: '',
-      TakingMedication: false,
-      Hypertension: false,
-      OtherConditions: ''
-    },
+  //   // QuestionPathological
+  //   pathologicalQuestions: {
+  //     Anemia: false,
+  //     Diabetes: false,
+  //     HeartDisease: false,
+  //     Allergies: false,
+  //     AllergiesDescription: '',
+  //     TakingMedication: false,
+  //     Hypertension: false,
+  //     OtherConditions: ''
+  //   },
 
-    // QuestionWomen
-    womenQuestions: {
-      IsPregnant: false,
-      PregnancyTimeMonth: 0,
-      LastMenstruationDate: new Date().toISOString().split('T')[0],
-      State: true
-    }
-  });
+  //   // QuestionWomen
+  //   womenQuestions: {
+  //     IsPregnant: false,
+  //     PregnancyTimeMonth: 0,
+  //     LastMenstruationDate: new Date().toISOString().split('T')[0],
+  //     State: true
+  //   }
+  // });
 
-
-  const handleSave = async () => {
-    const responseUserService = userService.savePatient(patientData);
+  const handleSave = async (intoPatientData) => {
+    const responseUserService = userService.saveOrUpdatePatient(intoPatientData);
     const message = `Guardando paciente:`;
 
     if (responseUserService) {
@@ -88,23 +79,13 @@ const UserMain = () => {
         "success"
       );
     }
-
+    setPatients(userService.getAllPatients())
     setView("userIndex");
   };
 
   const handleNewUser = () => {
-    // setPatientData(restarUser());
     setLevelSection(1);
-    const asdasd = patientData;
     setView("userForm");
-  };
-
-  const handleSubmitAlternativeIncrement = () => {
-    setLevelSection(prev => prev + 1);
-  };
-
-  const handleSubmitAlternativeDecrement = () => {
-    setLevelSection(prev => prev - 1);
   };
 
   const handleTestToast = () => {
@@ -115,47 +96,54 @@ const UserMain = () => {
     );
   };
 
+  const handleEdit = (patient) => {
+    setPatientData(patient);
+    setView("userForm");
+  };
+
+  const handleDelete = (patient) => {
+    setPatientData(patient);
+    setView("userForm");
+  };
+
   useEffect(() => {
     setPatients(userService.getAllPatients());
   }, []);
 
   return (
-    <div className="h-full w-full font-sans flex flex-col overflow-hidden">
+    // <div className="h-full w-full font-sans flex flex-col overflow-hidden">
+    <>
       {view === "userIndex" ? (
         <div className="flex flex-col h-full overflow-hidden">
-          <div className={`mb-5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-2 md:px-12 shadow-sm border border-slate-100 flex-shrink-0 ${STYLE_ROOT.roundedPanelMain}`}>
+          <div className={`mb-5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-3 md:px-12 shadow-sm border border-slate-100 flex-shrink-0 ${STYLE_ROOT.roundedPanelMain}`}>
             <div>
               <h1 className="text-3xl font-black text-[#052a3d] tracking-tight">
                 Pacientes
               </h1>
-              {/* <ButtonGeneric
-                variant="primary"
-                onClick={() => alert('sadasdjkljaskld')}
-              >
-                Nuevo Usuario
-              </ButtonGeneric> */}
             </div>
             <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-200">
             </div>
           </div>
           <div className={`bg-white shadow-sm border border-slate-100 flex flex-col flex-1 overflow-hidden ${STYLE_ROOT.roundedPanelMain}`}>
             <div className="flex-1 overflow-y-auto p-8 md:px-12 custom-scrollbar">
-              <UserTable
+              <div className="w-full mb-4">
+                <div className="w-full md:w-1/3 max-w-xs lg:max-w-[30%]">
+                  <ButtonGeneric
+                    variant="primary"
+                    onClick={handleNewUser}
+                  >
+                    Nuevo Usuario
+                  </ButtonGeneric>
+                </div>
+              </div>
+              <UserDataTable
                 patients={patients}
                 onAddNew={() => setView("userForm")}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
               />
             </div>
           </div>
-
-          {/* <button
-            onClick={() => handleTestToast()}
-            className="group relative inline-flex items-center gap-3 px-10 py-5 bg-white text-slate-800 font-black rounded-3xl shadow-xl hover:shadow-cyan-100 hover:-translate-y-1 transition-all border-2 border-transparent hover:border-cyan-500"
-          >
-            <div className="p-2 bg-cyan-100 text-cyan-600 rounded-xl group-hover:bg-cyan-600 group-hover:text-white transition-colors">
-              <UserPlus size={24} />
-            </div>
-            PRUEBA TOAST
-          </button> */}
         </div>
       ) : (
         <UserForm
@@ -165,53 +153,7 @@ const UserMain = () => {
         />
       )
       }
-    </div >
-    // <div className="min-h-screen p-8 flex flex-col items-center justify-center">
-    //   <div className="text-center space-y-6">
-    //     <h1 className="text-5xl font-black text-slate-800 tracking-tight">
-    //       Gestión de <span className="text-cyan-600">Pacientes</span>
-    //     </h1>
-    //     <p className="text-slate-500 max-w-md mx-auto">
-    //       Utilice el botón de abajo para registrar un nuevo ingreso al sistema hospitalario.
-    //     </p>
-
-    //     <button
-    //       onClick={() => setIsModalOpen(true)}
-    //       className="group relative inline-flex items-center gap-3 px-10 py-5 bg-white text-slate-800 font-black rounded-3xl shadow-xl hover:shadow-cyan-100 hover:-translate-y-1 transition-all border-2 border-transparent hover:border-cyan-500"
-    //     >
-    //       <div className="p-2 bg-cyan-100 text-cyan-600 rounded-xl group-hover:bg-cyan-600 group-hover:text-white transition-colors">
-    //         <UserPlus size={24} />
-    //       </div>
-    //       Nuevo Usuario
-    //     </button>
-    //     <button
-    //       onClick={() => handleTestToast()}
-    //       className="group relative inline-flex items-center gap-3 px-10 py-5 bg-white text-slate-800 font-black rounded-3xl shadow-xl hover:shadow-cyan-100 hover:-translate-y-1 transition-all border-2 border-transparent hover:border-cyan-500"
-    //     >
-    //       <div className="p-2 bg-cyan-100 text-cyan-600 rounded-xl group-hover:bg-cyan-600 group-hover:text-white transition-colors">
-    //         <UserPlus size={24} />
-    //       </div>
-    //       PRUEBA TOAST
-    //     </button>
-    //   </div>
-
-    //   <GenericModalWithControl
-    //     isOpen={isModalOpen}
-    //     onClose={() => setIsModalOpen(false)}
-    //     onSave={handleSave}
-    //     onSubmitAlternativeIncrement={handleSubmitAlternativeIncrement}
-    //     onSubmitAlternativeDecrement={handleSubmitAlternativeDecrement}
-    //     title="Registro de Nuevo Paciente"
-    //     saveText="Finalizar Registro"
-    //     footerActive={levelSection}
-    //   >
-    //     <PatientForm
-    //       formData={patientData}
-    //       setFormData={setPatientData}
-    //       paramLevelSection={levelSection}
-    //     />
-    //   </GenericModalWithControl>
-    // </div>
+    </ >
   );
 };
 
