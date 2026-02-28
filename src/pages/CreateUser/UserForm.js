@@ -112,21 +112,22 @@ const UserForm = ({ formData, setFormData, onSave }) => {
             <div className={`mb-5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-3 md:px-12 shadow-sm border border-slate-100 flex-shrink-0 ${STYLE_ROOT.roundedPanelMain}`}>
                 <div>
                     <h1 className="text-3xl font-black text-[#052a3d] tracking-tight">
-                        {/* Registro de <span className="text-cyan-600">Pacientes</span> */}
-                        {/* 117192  052a3d  614943*/}
                         Registro de <span className="text-[#19d1e6]">Pacientes</span>
                     </h1>
                 </div>
-                <div className="flex items-center gap-3 bg-slate-50 p-1 rounded-2xl border border-slate-200">
+
+                <div className="flex items-center gap-3 bg-slate-50 p-1 rounded-2xl border border-slate-200 self-start md:self-auto">
                     {[1, 2, 3, 4].map((num) => (
                         num <= totalSteps && (
                             <div key={num} className="flex items-center">
                                 <div className={`flex items-center justify-center w-6 h-6 rounded-xl text-sm font-bold transition-all shadow-sm ${step === num ? 'bg-[#052a3d] text-white scale-110 shadow-blue-200' :
-                                    step > num ? 'bg-[#117192] text-white' : 'bg-white text-slate-400 border border-slate-200'
+                                        step > num ? 'bg-[#117192] text-white' : 'bg-white text-slate-400 border border-slate-200'
                                     }`}>
                                     {step > num ? <CheckCircle2 size={16} /> : num}
                                 </div>
-                                {num < totalSteps && <div className={`w-4 h-0.2 mx-1 rounded-full ${step > num ? 'bg-green-500' : 'bg-slate-200'}`} />}
+                                {num < totalSteps && (
+                                    <div className={`w-4 h-0.2 mx-1 rounded-full ${step > num ? 'bg-green-500' : 'bg-slate-200'}`} />
+                                )}
                             </div>
                         )
                     ))}

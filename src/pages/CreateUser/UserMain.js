@@ -121,8 +121,8 @@ const UserMain = () => {
                 Pacientes
               </h1>
             </div>
-            <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-200">
-            </div>
+            {/* <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-200">
+            </div> */}
           </div>
           <div className={`bg-white shadow-sm border border-slate-100 flex flex-col flex-1 overflow-hidden ${STYLE_ROOT.roundedPanelMain}`}>
             <div className="flex-1 overflow-y-auto p-8 md:px-12 custom-scrollbar">

@@ -12,10 +12,13 @@ const Dashboard = () => {
   return (
     <div className="h-full w-full font-sans flex flex-col overflow-hidden">
       <div className="flex flex-col h-full overflow-hidden">
-        <div className={`mb-5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-3 md:px-12 shadow-sm border border-slate-100 flex-shrink-0 ${STYLE_ROOT.roundedPanelMain}`}>
-          <h1 className="text-3xl font-black text-[#052a3d] tracking-tight">
+        <div className={`mb-5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 md:p-3 md:px-12 shadow-sm border border-slate-100 flex-shrink-0 ${STYLE_ROOT.roundedPanelMain}`}>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#052a3d] tracking-tight transition-all duration-300">
             Bienvenido a <span className="text-[#19d1e6]">Thiara Arte Dental</span>
           </h1>
+          {/* <div className="text-xs font-medium text-slate-400 uppercase tracking-widest">
+            Panel de Control
+          </div> */}
         </div>
         <div className={`bg-white shadow-sm border border-slate-100 flex flex-col flex-1 overflow-hidden ${STYLE_ROOT.roundedPanelMain}`}>
           <div className="flex-1 overflow-y-auto p-8 md:px-12 custom-scrollbar">
