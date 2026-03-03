@@ -438,7 +438,7 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                         {!(step === 1) && (
                             <ButtonGeneric
                                 variant="before"
-                                className="w-[30%]"
+                                className="w-full"
                                 onClick={() => setStep(s => s - 1)}
                             >
                                 <ChevronLeft size={20} />
@@ -450,7 +450,7 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                         {step < totalSteps ? (
                             <ButtonGeneric
                                 variant="primary"
-                                className="w-[30%]"
+                                className="w-full"
                                 onClick={() => setStep(s => s + 1)}
                             >
                                 Siguiente
@@ -459,7 +459,7 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                         ) : (
                             <ButtonGeneric
                                 variant="primary"
-                                className="w-[30%] gap-2"
+                                className="w-full gap-2"
                                 onClick={onSaveInternal}
                             >
                                 Finalizar Registro
