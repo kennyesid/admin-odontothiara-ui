@@ -453,7 +453,7 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                                 className="w-full"
                                 onClick={() => setStep(s => s + 1)}
                             >
-                                Siguiente
+                                Siguienteeee
                                 <ChevronRight size={20} />
                             </ButtonGeneric>
                         ) : (
