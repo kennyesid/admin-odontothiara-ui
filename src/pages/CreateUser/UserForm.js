@@ -121,7 +121,7 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                         num <= totalSteps && (
                             <div key={num} className="flex items-center">
                                 <div className={`flex items-center justify-center w-6 h-6 rounded-xl text-sm font-bold transition-all shadow-sm ${step === num ? 'bg-[#052a3d] text-white scale-110 shadow-blue-200' :
-                                        step > num ? 'bg-[#117192] text-white' : 'bg-white text-slate-400 border border-slate-200'
+                                    step > num ? 'bg-[#117192] text-white' : 'bg-white text-slate-400 border border-slate-200'
                                     }`}>
                                     {step > num ? <CheckCircle2 size={16} /> : num}
                                 </div>

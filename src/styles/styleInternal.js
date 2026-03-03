@@ -1,4 +1,4 @@
-import { STYLE_ROOT } from "./styleGeneric";
+import { STYLE_ROOT } from "@/styles/styleGeneric";
 
 export const STYLE_INTERNAL = {
     // Clases base de color (Asegúrate de tener configurado odont-primary en tailwind.config.js)

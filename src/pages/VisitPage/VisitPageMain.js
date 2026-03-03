@@ -5,7 +5,7 @@ import { userService } from '@/services/user/UserService';
 import { showToast } from '@/utils/showToast';
 // 3. Componentes de la aplicación
 // import UserForm from './UserForm';
-import PatientDataTable from './Components/PatientDataTable';
+import PatientDataTable from '@/pages/VisitPage/Components/PatientDataTable';
 import ButtonGeneric from '@/components/Common/Button/ButtonGeneric';
 // 4. Estilos y Constantes
 import { STYLE_ROOT } from '@/styles/styleGeneric';
@@ -80,7 +80,7 @@ const VisitPageMain = () => {
                                         variant="primary"
                                         onClick={handleNewUser}
                                     >
-                                        Nuevo Usuario
+                                        Nuevo Paciente
                                     </ButtonGeneric>
                                 </div>
                             </div>

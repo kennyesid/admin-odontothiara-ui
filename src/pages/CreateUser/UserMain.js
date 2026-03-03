@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { userService } from '@/services/user/UserService';
 import { showToast } from '@/utils/showToast';
 // 3. Componentes de la aplicación
-import UserForm from './UserForm';
+import UserForm from '@/pages/CreateUser/UserForm';
 import UserDataTable from '@/components/DataTable/UserDataTable';
 import ButtonGeneric from '@/components/Common/Button/ButtonGeneric';
 // 4. Estilos y Constantes
