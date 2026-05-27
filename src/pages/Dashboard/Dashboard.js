@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement, incrementByAmount } from '@/features/counter/counterSlice';
 import { motion } from 'framer-motion';
 import { Users, FileText, Calendar as CalIcon } from 'lucide-react';
 import { defaultPatients, defaultAppointments } from '@/mock/patients';
@@ -8,6 +10,9 @@ const Dashboard = () => {
   const totalPatients = defaultPatients.length;
   const totalVisits = defaultPatients.reduce((acc, p) => acc + p.visits.length, 0);
   const upcomingAppts = defaultAppointments.filter(appt => new Date(appt.date) > new Date()).length;
+
+  const count = useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
 
   return (
     <div className="h-full w-full font-sans flex flex-col overflow-hidden">
@@ -23,6 +28,36 @@ const Dashboard = () => {
         <div className={`bg-white shadow-sm border border-slate-100 flex flex-col flex-1 overflow-hidden ${STYLE_ROOT.roundedPanelMain}`}>
           <div className="flex-1 overflow-y-auto p-8 md:px-12 custom-scrollbar">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 sm:space-y-8 w-full">
+
+              {/* DELETE */}
+              <div className="p-4 border rounded-lg shadow-md flex flex-col items-center gap-4">
+                <h2 className="text-2xl font-bold">Contador: {count}</h2>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => dispatch(decrement())}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                  >
+                    Decrementar
+                  </button>
+
+                  <button
+                    onClick={() => dispatch(increment())}
+                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+                  >
+                    Incrementar
+                  </button>
+                </div>
+
+                <button
+                  onClick={() => dispatch(incrementByAmount(5))}
+                  className="mt-2 text-blue-600 hover:underline"
+                >
+                  Sumar +5
+                </button>
+              </div>
+              {/* FIN DELETE */}
+
               <div className="text-center">
 
                 <p className="text-gray-600 text-sm sm:text-base">Tu sistema todo-en-uno para odontología. ¡Sonríe mientras organizas!</p>
