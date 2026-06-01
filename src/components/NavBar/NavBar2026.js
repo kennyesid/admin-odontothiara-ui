@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 import {
     Home,
     User,
@@ -15,10 +16,13 @@ import {
 import { STYLE_ROOT } from "@/styles/styleGeneric";
 import { STYLE_INTERNAL } from "@/styles/styleInternal";
 
-const NavItem = ({ Icon, label, isActive, path }) => {
+const MotionLink = motion(Link);
+
+const NavItem = ({ Icon, label, isActive, path, onClick }) => {
     return (
-        <motion.a
-            href={path}
+        <MotionLink
+            to={path}
+            onClick={onClick}
             whileHover={{ x: 4 }}
             whileTap={{ scale: 0.97 }}
             className={`
@@ -44,14 +48,15 @@ const NavItem = ({ Icon, label, isActive, path }) => {
                     className="absolute right-3 w-1.5 h-1.5 bg-white rounded-full"
                 />
             )}
-        </motion.a>
+        </MotionLink>
     );
 };
 
-const NavBar2026 = () => {
+const NavBar2026 = ({ onLogout }) => {
 
     const [isOpen, setIsOpen] = useState(false);
-    const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
+    const location = useLocation();
+    const currentPath = location.pathname;
 
     const navItems = [
         { path: "/", label: "Dashboard", icon: Home },
@@ -113,7 +118,10 @@ const NavBar2026 = () => {
                     onClick={() => setIsOpen(false)}
                 />
 
-                <button className="flex items-center p-3.5 w-full text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all group">
+                <button 
+                    onClick={onLogout}
+                    className="flex items-center p-3.5 w-full text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all group"
+                >
                     <LogOut size={20} className="mr-3 transition-transform group-hover:-translate-x-1" />
                     <span className="text-[14px] font-medium">Salir</span>
                 </button>
