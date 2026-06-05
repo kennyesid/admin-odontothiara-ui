@@ -94,7 +94,7 @@ const PatientDataTable = ({ patients, onAddNew, onEdit, onDelete }) => {
         <div className="flex flex-col h-full animate-in fade-in duration-500">
             {/* Barra de búsqueda */}
             <div className="flex flex-col md:flex-row gap-4 mb-6 items-center w-full">
-                <div className="relative flex-1 md:basis-1/2 w-full">
+                <div className="relative flex-1 md:basis-3/4 w-full">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                     <input
                         type="text"
@@ -107,7 +107,7 @@ const PatientDataTable = ({ patients, onAddNew, onEdit, onDelete }) => {
                         }}
                     />
                 </div>
-                <div className="flex-1 md:basis-1/2 flex justify-end">
+                <div className="flex-1 md:basis-1/4 flex justify-end">
                     <ButtonGeneric
                         as="button"
                         variant="primary"

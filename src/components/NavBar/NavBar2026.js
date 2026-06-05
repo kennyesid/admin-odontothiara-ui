@@ -60,7 +60,7 @@ const NavBar2026 = ({ onLogout }) => {
 
     const navItems = [
         { path: "/", label: "Dashboard", icon: Home },
-        { path: "/createUser", label: "Usuario", icon: UserPlus },
+        { path: "/createUser", label: "Pacientes", icon: UserPlus },
         { path: "/visit", label: "Visita Médica", icon: ArrowLeftRight },
         { path: "/history", label: "Historial", icon: Search },
         { path: "/calendar", label: "Citas", icon: CalendarDays },
@@ -118,7 +118,7 @@ const NavBar2026 = ({ onLogout }) => {
                     onClick={() => setIsOpen(false)}
                 />
 
-                <button 
+                <button
                     onClick={onLogout}
                     className="flex items-center p-3.5 w-full text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all group"
                 >
