@@ -64,8 +64,11 @@ const PatientVisit = ({ onSaveVisit }) => {
   const cardStyle = "p-5 rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-md transition-shadow";
 
   useEffect(() => {
-    const data = userService.getAllPatients();
-    setPatients(data);
+    const loadPatients = async () => {
+      const data = await userService.getAllPatients();
+      setPatients(data);
+    };
+    loadPatients();
   }, []);
 
   return (

@@ -16,70 +16,20 @@ const UserMain = () => {
   const [view, setView] = useState("userIndex");
   const [patients, setPatients] = useState([]);
   const [patientData, setPatientData] = useState(INITIAL_PATIENT_STATE);
-  // const [patientData, setPatientData] = useState({
-  //   Id: 0,
-  //   RolId: 2,
-  //   Name: '',
-  //   FirstSurname: '',
-  //   SecondSurname: '',
-  //   Image: '',
-  //   Age: 0,
-  //   Sexo: 'Masculino',
-  //   BirthDate: new Date().toISOString().split('T')[0],
-  //   PlaceOfBirth: '',
-  //   Occupation: '',
-  //   MaritalStatus: 'S/N',
-  //   Address: '',
-  //   IdentityCard: '',
-  //   Email: '',
-  //   Phone: '',
-
-  //   // QuestionPersonal
-  //   personalQuestions: {
-  //     Smokes: false,
-  //     SmokingYears: 0,
-  //     DrinksAlcohol: false,
-  //     AlcoholDescription: '',
-  //     Bruxism: false,
-  //     BruxismDescription: '',
-  //     ChewsCoca: false,
-  //     CocaDescription: '',
-  //     State: true
-  //   },
-
-  //   // QuestionPathological
-  //   pathologicalQuestions: {
-  //     Anemia: false,
-  //     Diabetes: false,
-  //     HeartDisease: false,
-  //     Allergies: false,
-  //     AllergiesDescription: '',
-  //     TakingMedication: false,
-  //     Hypertension: false,
-  //     OtherConditions: ''
-  //   },
-
-  //   // QuestionWomen
-  //   womenQuestions: {
-  //     IsPregnant: false,
-  //     PregnancyTimeMonth: 0,
-  //     LastMenstruationDate: new Date().toISOString().split('T')[0],
-  //     State: true
-  //   }
-  // });
 
   const handleSave = async (intoPatientData) => {
-    const responseUserService = userService.saveOrUpdatePatient(intoPatientData);
+    const responseUserService = await userService.saveOrUpdatePatient(intoPatientData);
     const message = `Guardando paciente:`;
 
     if (responseUserService) {
       showToast(
         "Registro Exitoso",
-        `El paciente ha sido guardado en el historial local.`,
+        `El paciente ha sido guardado en la base de datos.`,
         "success"
       );
     }
-    setPatients(userService.getAllPatients())
+    const updatedPatients = await userService.getAllPatients();
+    setPatients(updatedPatients);
     setView("userIndex");
   };
 
@@ -107,7 +57,11 @@ const UserMain = () => {
   };
 
   useEffect(() => {
-    setPatients(userService.getAllPatients());
+    const loadPatients = async () => {
+      const data = await userService.getAllPatients();
+      setPatients(data);
+    };
+    loadPatients();
   }, []);
 
   return (

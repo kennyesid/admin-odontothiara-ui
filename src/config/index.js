@@ -16,8 +16,8 @@ const config = {
         isProduction: process.env.NODE_ENV === 'production'
     },
     database: {
-        url: process.env.NEXT_PUBLIC_SUPABASE_URL,
-        secretKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+        url: process.env.REACT_APP_SUPABASE_URL,
+        secretKey: process.env.REACT_APP_SUPABASE_ANON_KEY,
         // Ejemplo de casteo a número para configuraciones de pool
         maxConnections: parseInt(process.env.DB_MAX_CONNECTIONS, 10) || 10
     },

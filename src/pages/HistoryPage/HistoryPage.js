@@ -1,11 +1,18 @@
-import React from 'react';  
+import React, { useEffect, useState } from 'react';  
 import PatientHistory from '@/components/PatientHistory';  
-import { defaultPatients } from '@/mock/patients';  
-import { useLocalStorage } from '@/utils/helpers';  
+import { visitService } from '@/services/visit/VisitService';  
 import { motion } from 'framer-motion';  
 
 const HistoryPage = () => {  
-  const [patients, setPatients] = useLocalStorage('patients', defaultPatients);  
+  const [patients, setPatients] = useState([]);  
+
+  useEffect(() => {  
+    const loadPatients = async () => {  
+      const data = await visitService.getPatientsWithVisits();  
+      setPatients(data);  
+    };  
+    loadPatients();  
+  }, []);  
 
   return (  
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl mx-auto">  

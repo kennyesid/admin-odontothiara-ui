@@ -1,40 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import PatientVisit from "@/components/PatientVisit";
-import { defaultPatients } from "@/mock/patients";
-import { useLocalStorage } from "@/utils/helpers";
 import { motion } from "framer-motion";
 import { STYLE_ROOT } from "@/styles/styleGeneric";
+import { visitService } from "@/services/visit/VisitService";
+import { showToast } from "@/utils/showToast";
 
-const VisitPage = ({ patientStorage }) => {
-  const [patients, setPatients] = useLocalStorage("patients", defaultPatients);
-
-  const handleSaveVisit = (visitData) => {
-    // Buscar paciente o crear nuevo
-    let updatedPatients = [...patients];
-    const existingPatient = updatedPatients.find(
-      (p) => p.name.toLowerCase() === visitData.patientName.toLowerCase()
-    );
-    if (existingPatient) {
-      existingPatient.visits.push({
-        id: Date.now().toString(),
-        ...visitData,
-        teethMarks: visitData.teethMarks,
-      });
+const VisitPage = () => {
+  const handleSaveVisit = async (visitData) => {
+    const success = await visitService.saveVisit(visitData);
+    if (success) {
+      showToast("Registro Exitoso", "¡Visita médica guardada con éxito! 😁", "success");
     } else {
-      updatedPatients.push({
-        id: Date.now().toString(),
-        name: visitData.patientName,
-        visits: [
-          {
-            id: Date.now().toString() + "_v",
-            ...visitData,
-            teethMarks: visitData.teethMarks,
-          },
-        ],
-      });
+      showToast("Error", "No se pudo guardar la visita médica.", "error");
     }
-    setPatients(updatedPatients);
-    alert("¡Visita guardada! Dale una sonrisa al paciente. 😁");
   };
 
   return (
@@ -51,22 +29,11 @@ const VisitPage = ({ patientStorage }) => {
         </div>
         <motion.div className={`bg-white shadow-sm border border-slate-100 flex flex-col flex-1 overflow-hidden ${STYLE_ROOT.roundedPanelMain}`}>
           <div className="flex-1 overflow-y-auto p-8 md:px-12 custom-scrollbar">
-            {/* <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className=" md:max-w-6xl lg:w-7xl mx-auto"
-            > */}
-
             <PatientVisit onSaveVisit={handleSaveVisit} />
-            {/* </motion.div> */}
           </div>
         </motion.div>
       </div>
     </div>
-
-
-
-
   );
 };
 
