@@ -68,6 +68,7 @@ class UserService {
      */
     async getAllPatients() {
         try {
+            console.log("Obteniendo pacientes de Supabase");
             const { data, error } = await supabase
                 .from('patients')
                 .select('*')
@@ -79,7 +80,7 @@ class UserService {
             }
 
             const parsedPatients = data.map(p => this.mapFromDatabase(p));
-            
+
             try {
                 localStorage.setItem(this.storageKey, JSON.stringify(parsedPatients));
             } catch (e) {
@@ -134,7 +135,7 @@ class UserService {
             } else {
                 localPatients.unshift(uiPatient);
             }
-            
+
             try {
                 localStorage.setItem(this.storageKey, JSON.stringify(localPatients));
             } catch (e) {
@@ -147,13 +148,13 @@ class UserService {
             try {
                 const localPatients = this.getAllPatientsLocal();
                 const id = patientData.id || patientData.Id || crypto.randomUUID();
-                const localData = { 
-                    ...patientData, 
-                    id, 
+                const localData = {
+                    ...patientData,
+                    id,
                     Id: id,
-                    createdAt: new Date().toISOString() 
+                    createdAt: new Date().toISOString()
                 };
-                
+
                 const index = localPatients.findIndex(p => p.id === id);
                 if (index !== -1) {
                     localPatients[index] = localData;
