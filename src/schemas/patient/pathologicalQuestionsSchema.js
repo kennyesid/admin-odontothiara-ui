@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const PathologicalQuestions = z.object({
+export const PathologicalQuestionsSchema = z.object({
     anemia: z.boolean().optional(),
     diabetes: z.boolean().optional(),
     heart_disease: z.boolean().optional(),
