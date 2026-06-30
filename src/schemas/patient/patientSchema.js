@@ -4,7 +4,7 @@ import { PathologicalQuestionsSchema } from './pathologicalQuestionsSchema';
 import { WomenQuestionSchema } from './womenQuestionSchema';
 
 export const PatientSchema = z.object({
-    id: z.string().uuid().optional(),
+    id: z.number(),
     rol_id: z.number().optional().default(2),
     rol_name: z.string().optional(),
     group_id: z.number().optional().default(1),
