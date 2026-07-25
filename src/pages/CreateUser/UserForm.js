@@ -47,9 +47,8 @@ const UserForm = ({ formData, setFormData, onSave }) => {
     useEffect(() => {
         async function fetchQuestions() {
             setLoadingQuestions(true);
-            const response = await getFlatQuestionsByGroupId(); // Sin parámetros, perfecto.
+            const response = await getFlatQuestionsByGroupId();
             console.log(JSON.stringify(response));
-            // 👈 Cambiado "codigo" por "code" para hacer match con tu nuevo helper
             if (response.code === 200 && response.content) {
                 setDynamicQuestions(response.content);
 
