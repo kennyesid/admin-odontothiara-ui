@@ -231,9 +231,7 @@ export async function getFlatQuestionsByGroupId() {
                 )
             `)
             .eq('group_id', groupId)
-            // Filtramos el estado de la relación group_questions
             .eq('state', true)
-            // ¡CORREGIDO AQUÍ!: Quitamos el '!inner' del string del filtro
             .eq('medical_questions.state', true);
 
         if (error) throw error;
@@ -252,9 +250,7 @@ export async function getFlatQuestionsByGroupId() {
             content: flatData
         };
     } catch (error) {
-        // Si sigue dando error, ahora sí podremos desplegar el objeto completo expandido
         console.error(`❌ Error REAL de Supabase para grupo ${groupId}:`, JSON.stringify(error, null, 2));
-
         return {
             code: 500,
             message: `Error al ejecutar consulta de preguntas: ${error?.message || 'Error de base de datos'}`,
