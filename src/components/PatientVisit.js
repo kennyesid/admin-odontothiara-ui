@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Calendar, User, FileText, Save } from "lucide-react";
 import DentalChart from "./DentalChart/DentalChart";
 import ButtonGeneric from "./Common/Button/ButtonGeneric";
-import { userService } from "@/services/user/UserService";
+import { getAllPatients } from "@/services";
 
 const now = new Date();
 const offset = now.getTimezoneOffset() * 60000;
@@ -12,7 +12,6 @@ const localISOTime = new Date(now - offset).toISOString().slice(0, 16);
 const PatientVisit = ({ onSaveVisit }) => {
   const [formData, setFormData] = useState({
     patientName: "",
-    // date: new Date().toISOString().slice(0, 16),
     date: localISOTime,
     preObservations: "",
     postObservations: "",
@@ -65,7 +64,7 @@ const PatientVisit = ({ onSaveVisit }) => {
 
   useEffect(() => {
     const loadPatients = async () => {
-      const data = await userService.getAllPatients();
+      const data = await getAllPatients();
       setPatients(data);
     };
     loadPatients();

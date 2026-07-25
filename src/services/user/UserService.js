@@ -1,10 +1,10 @@
-import { DatabaseService } from '@/lib/databaseService'; // Ajusta la ruta según tu estructura
-import { configService } from './configService'; // O de donde obtengas el groupId actual
+import { DatabaseService } from "@/lib/database/databaseService";
 
 // ========================================================
 // INSTANCIA DE DatabaseService PARA PATIENTS
 // ========================================================
-const groupId = configService ? configService.getGroupId() : 1;
+// const groupId = configService ? configService.getGroupId() : 1;
+const groupId = 1;
 // Tercer parámetro en 'true' porque la tabla 'patients' sí tiene la columna 'group_id' (o 'groupId' según tu esquema)
 const patientDatabaseService = new DatabaseService('patients', groupId, true);
 
@@ -12,60 +12,162 @@ const patientDatabaseService = new DatabaseService('patients', groupId, true);
 // PATIENT SERVICES
 // ========================================================
 
-/**
- * Obtener todos los pacientes activos del grupo actual.
- * @returns {Promise<Array>}
- */
-export async function getPatients() {
-    return patientDatabaseService.getAll('id', true);
+export async function getAllPatients() {
+    try {
+        const patients = await patientDatabaseService.getAll('id', true);
+        return {
+            code: 200,
+            message: "Pacientes obtenidos con éxito",
+            content: patients
+        };
+    } catch (error) {
+        console.error("Error en getAllPatients:", error.message);
+        return {
+            code: 500,
+            message: "Error al obtener la lista de pacientes",
+            content: []
+        };
+    }
 }
 
 /**
  * Obtener un paciente por su ID.
- * @param {number} id - ID del paciente
- * @returns {Promise<Object|null>}
  */
 export async function getPatientById(id) {
-    return patientDatabaseService.getByField('id', id);
+    try {
+        const patient = await patientDatabaseService.getByField('id', id);
+        if (!patient) {
+            return {
+                code: 404,
+                message: "Paciente no encontrado",
+                content: null
+            };
+        }
+        return {
+            code: 200,
+            message: "Paciente obtenido con éxito",
+            content: patient
+        };
+    } catch (error) {
+        console.error("Error en getPatientById:", error.message);
+        return {
+            code: 500,
+            message: "Error al buscar el paciente por ID",
+            content: null
+        };
+    }
 }
 
 /**
  * Obtener un paciente por número de carnet de identidad.
- * @param {string} identityCard - Carnet de identidad
- * @returns {Promise<Object|null>}
  */
 export async function getPatientByIdentityCard(identityCard) {
-    return patientDatabaseService.getByField('identity_card', identityCard);
+    try {
+        const patient = await patientDatabaseService.getByField('identity_card', identityCard);
+        if (!patient) {
+            return {
+                code: 404,
+                message: "Paciente no encontrado con ese carnet",
+                content: null
+            };
+        }
+        return {
+            code: 200,
+            message: "Paciente obtenido por carnet con éxito",
+            content: patient
+        };
+    } catch (error) {
+        console.error("Error en getPatientByIdentityCard:", error.message);
+        return {
+            code: 500,
+            message: "Error al buscar el paciente por carnet",
+            content: null
+        };
+    }
 }
 
 /**
  * Crear un nuevo paciente.
- * @param {Object} patientData - Datos del paciente (sin id, created_at, updated_at)
- * @returns {Promise<Object>}
  */
 export async function createPatient(patientData) {
-    return patientDatabaseService.create(patientData);
+    try {
+        const newPatient = await patientDatabaseService.create(patientData);
+        return {
+            code: 201,
+            message: "Paciente creado con éxito",
+            content: newPatient
+        };
+    } catch (error) {
+        console.error("Error en createPatient:", error.message);
+        return {
+            code: 400,
+            message: "Error al registrar el paciente",
+            content: null
+        };
+    }
 }
 
 /**
  * Actualizar los datos de un paciente.
- * @param {number} id - ID del paciente
- * @param {Object} updates - Campos a modificar
- * @returns {Promise<Object|null>}
  */
-export async function updatePatient(id, updates) {
-    console.log('Actualizando paciente:', JSON.stringify(updates));
-    return patientDatabaseService.update('id', id, updates);
+export async function saveOrUpdatePatient(patient) {
+    try {
+        const id = patient.id;
+        const updates = patient;
+        // console.log('Actualizando paciente:', JSON.stringify(updates));
+        const updatedPatient = await patientDatabaseService.update('id', id, updates);
+
+        if (!updatedPatient) {
+            return {
+                code: 404,
+                message: "Paciente no encontrado para actualizar",
+                content: null
+            };
+        }
+
+        return {
+            code: 200,
+            message: "Paciente actualizado con éxito",
+            content: updatedPatient
+        };
+    } catch (error) {
+        console.error("Error en saveOrUpdatePatient:", error.message);
+        return {
+            code: 400,
+            message: "Error al actualizar el paciente",
+            content: null
+        };
+    }
 }
 
 /**
  * Eliminar lógicamente un paciente (cambia state a false).
- * @param {number} id - ID del paciente
- * @returns {Promise<boolean>}
  */
 export async function deletePatient(id) {
-    const result = await patientDatabaseService.update('id', id, { state: false });
-    return result !== null;
+    try {
+        const result = await patientDatabaseService.update('id', id, { state: false });
+
+        if (!result) {
+            return {
+                code: 404,
+                message: "Paciente no encontrado para eliminación lógica",
+                content: false
+            };
+        }
+
+        return {
+            code: 200,
+            message: "Paciente eliminado lógicamente con éxito",
+            content: true
+        };
+    } catch (error) {
+        console.error("Error en deletePatient:", error.message);
+        return {
+            code: 500,
+            message: "Error al eliminar el paciente",
+            content: false
+        };
+    }
 }
 
 

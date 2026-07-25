@@ -1,5 +1,5 @@
 import { supabase } from '@/config/supabaseClient';
-import { userService } from '@/services/user/UserService';
+import { getAllPatients, userService } from '@/services/user/UserService';
 import { defaultPatients } from '@/mock/patients';
 
 // Visitas por defecto extraídas de los datos de prueba
@@ -66,7 +66,7 @@ class VisitService {
         const { error: insertError } = await supabase
           .from('medical_visits')
           .insert(defaultVisits);
-        
+
         if (!insertError) {
           localStorage.setItem(this.storageKey, JSON.stringify(defaultVisits));
           return defaultVisits;
@@ -118,7 +118,7 @@ class VisitService {
   async saveVisit(visitData) {
     try {
       // Obtener listado de pacientes para resolver el ID
-      const patients = await userService.getAllPatients();
+      const patients = await getAllPatients();
       const patient = patients.find(p => p.name.toLowerCase() === visitData.patientName.toLowerCase());
       const patientId = patient ? String(patient.id) : String(Date.now()); // Fallback ID
 
@@ -189,7 +189,7 @@ class VisitService {
    */
   async getPatientsWithVisits() {
     try {
-      const patients = await userService.getAllPatients();
+      const patients = await getAllPatients();
       const visits = await this.getAllVisits();
 
       // Mapear visitas a cada paciente

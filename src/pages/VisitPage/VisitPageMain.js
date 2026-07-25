@@ -1,7 +1,7 @@
 // 1. React y librerías externas
 import React, { useEffect, useState } from 'react';
 // 2. Servicios y Utilidades (Capa de datos)
-import { userService } from '@/services/user/UserService';
+import { getAllPatients, saveOrUpdatePatient, userService } from '@/services/user/UserService';
 import { showToast } from '@/utils/showToast';
 // 3. Componentes de la aplicación
 // import UserForm from './UserForm';
@@ -19,7 +19,7 @@ const VisitPageMain = () => {
     const [patientData, setPatientData] = useState(INITIAL_PATIENT_STATE);
 
     const handleSave = async (intoPatientData) => {
-        const responseUserService = await userService.saveOrUpdatePatient(intoPatientData);
+        const responseUserService = await saveOrUpdatePatient(intoPatientData);
         const message = `Guardando paciente:`;
 
         if (responseUserService) {
@@ -29,7 +29,7 @@ const VisitPageMain = () => {
                 "success"
             );
         }
-        const updatedPatients = await userService.getAllPatients();
+        const updatedPatients = await getAllPatients();
         setPatients(updatedPatients);
         setView("userIndex");
     };
@@ -59,8 +59,13 @@ const VisitPageMain = () => {
 
     useEffect(() => {
         const loadPatients = async () => {
-            const data = await userService.getAllPatients();
-            setPatients(data);
+            const data = await getAllPatients();
+            if (data.code === 200) {
+                setPatients(data.content);
+            } else {
+                console.error(data.message);
+            }
+
         };
         loadPatients();
     }, []);

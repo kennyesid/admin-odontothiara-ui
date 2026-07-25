@@ -11,9 +11,9 @@ export class DatabaseService {
      * @param {number[]} groupIds - Array de IDs de grupo (por defecto [1])
      * @param {boolean} hasGroupId - Si la tabla tiene columna 'groupId'
      */
-    constructor(tableName, groupIds = [1], hasGroupId = false) {
+    constructor(tableName, group_id = [1], hasGroupId = false) {
         this.tableName = tableName;
-        this.groupIds = Array.isArray(groupIds) ? groupIds : [groupIds];
+        this.group_id = Array.isArray(group_id) ? group_id : [group_id];
         this.hasGroupId = hasGroupId;
     }
 
@@ -25,12 +25,12 @@ export class DatabaseService {
     _applyGroupFilter(query) {
         if (!this.hasGroupId) return query;
 
-        if (this.groupIds.length === 1) {
+        if (this.group_id.length === 1) {
             // Un solo grupo → filtro con eq
-            return query.eq('groupId', this.groupIds[0]);
-        } else if (this.groupIds.length > 1) {
+            return query.eq('group_id', this.group_id[0]);
+        } else if (this.group_id.length > 1) {
             // Múltiples grupos → filtro con in
-            return query.in('groupId', this.groupIds);
+            return query.in('group_id', this.group_id);
         }
         // Si no hay groupIds, no filtrar (devolver query sin cambios)
         return query;
@@ -98,8 +98,8 @@ export class DatabaseService {
         let itemToInsert = { ...item };
 
         if (this.hasGroupId) {
-            const groupIdToUse = customGroupId !== null ? customGroupId : (this.groupIds.length > 0 ? this.groupIds[0] : 1);
-            itemToInsert.groupId = groupIdToUse;
+            const groupIdToUse = customGroupId !== null ? customGroupId : (this.group_id.length > 0 ? this.group_id[0] : 1);
+            itemToInsert.group_id = groupIdToUse;
         }
 
         const { data, error } = await supabase
