@@ -112,33 +112,81 @@ export async function createPatient(patientData) {
  */
 export async function saveOrUpdatePatient(patient) {
     try {
-        const id = patient.id;
-        const updates = patient;
-        // console.log('Actualizando paciente:', JSON.stringify(updates));
-        const updatedPatient = await patientDatabaseService.update('id', id, updates);
+        let result;
+        let statusCode = 200;
+        let successMessage = "";
 
-        if (!updatedPatient) {
-            return {
-                code: 404,
-                message: "Paciente no encontrado para actualizar",
-                content: null
-            };
+        // Verificamos si tiene un ID válido para decidir si actualizamos o creamos
+        if (patient.id) {
+            // Intentamos actualizar
+            const updates = { ...patient };
+            delete updates.id; // Evitamos mandar el ID en el objeto de campos a actualizar por seguridad
+
+            const updatedPatient = await patientDatabaseService.update('id', patient.id, updates);
+
+            if (updatedPatient) {
+                result = updatedPatient;
+                successMessage = "Paciente actualizado con éxito";
+            } else {
+                // Si el ID venía pero no se encontró en la base de datos, lo creamos (o forzamos inserción)
+                result = await patientDatabaseService.create(patient);
+                statusCode = 201;
+                successMessage = "Paciente creado con éxito (ID no encontrado previamente)";
+            }
+        } else {
+            // No tiene ID, por lo tanto es un registro nuevo
+            const newPatientData = { ...patient };
+            delete newPatientData.id; // Limpiamos por si viene vacío o null
+
+            result = await patientDatabaseService.create(newPatientData);
+            statusCode = 201;
+            successMessage = "Paciente creado con éxito";
         }
 
         return {
-            code: 200,
-            message: "Paciente actualizado con éxito",
-            content: updatedPatient
+            code: statusCode,
+            message: successMessage,
+            content: result
         };
+
     } catch (error) {
         console.error("Error en saveOrUpdatePatient:", error.message);
         return {
             code: 400,
-            message: "Error al actualizar el paciente",
+            message: "Error al guardar o actualizar el paciente",
             content: null
         };
     }
 }
+// export async function saveOrUpdatePatient(patient) {
+//     try {
+//         const id = patient.id;
+//         const updates = patient;
+//         // console.log('Actualizando paciente:', JSON.stringify(updates));
+//         const updatedPatient = await patientDatabaseService.update('id', id, updates);
+
+//         if (!updatedPatient) {
+//             return {
+//                 code: 404,
+//                 message: "Paciente no encontrado para actualizar",
+//                 content: null
+//             };
+//         }
+
+//         return {
+//             code: 200,
+//             message: "Paciente actualizado con éxito",
+//             content: updatedPatient
+//         };
+//     } catch (error) {
+//         console.error("Error en saveOrUpdatePatient:", error.message);
+//         return {
+//             code: 400,
+//             message: "Error al actualizar el paciente",
+//             content: null
+//         };
+//     }
+// }
 
 /**
  * Eliminar lógicamente un paciente (cambia state a false).

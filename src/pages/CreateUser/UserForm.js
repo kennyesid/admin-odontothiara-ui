@@ -41,7 +41,8 @@ const UserForm = ({ formData, setFormData, onSave }) => {
     const [dynamicQuestions, setDynamicQuestions] = useState([]);
     const [loadingQuestions, setLoadingQuestions] = useState(true);
 
-    const totalSteps = formData.Sexo === "Femenino" ? 4 : 3;
+    // const totalSteps = formData.Sexo === "Femenino" ? 2 : 2;
+    const totalSteps = 2;
     const isFemale = formData.Sexo === "Femenino";
 
     useEffect(() => {
@@ -156,8 +157,8 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                     </h1>
                 </div>
 
-                <div className="flex items-center gap-3 bg-slate-50 p-1 rounded-2xl border border-slate-200 self-start md:self-auto">
-                    {[1, 2, 3, 4].map((num) => (
+                {/* <div className="flex items-center gap-3 bg-slate-50 p-1 rounded-2xl border border-slate-200 self-start md:self-auto">
+                    {[1, 2].map((num) => (
                         num <= totalSteps && (
                             <div key={num} className="flex items-center">
                                 <div className={`flex items-center justify-center w-6 h-6 rounded-xl text-sm font-bold transition-all shadow-sm ${step === num ? 'bg-[#052a3d] text-white scale-110 shadow-blue-200' :
@@ -171,6 +172,29 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                             </div>
                         )
                     ))}
+                </div> */}
+                {/* Header Steps */}
+                <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-200 self-start md:self-auto shrink-0">
+                    {Array.from({ length: totalSteps }, (_, index) => {
+                        const num = index + 1;
+                        return (
+                            <div key={num} className="flex items-center">
+                                <div className={`flex items-center justify-center w-7 h-7 rounded-xl text-xs font-bold transition-all shadow-sm shrink-0 ${step === num
+                                    ? 'bg-[#052a3d] text-white scale-105 shadow-blue-200'
+                                    : step > num
+                                        ? 'bg-[#117192] text-white'
+                                        : 'bg-white text-slate-400 border border-slate-200'
+                                    }`}>
+                                    {step > num ? <CheckCircle2 size={16} /> : num}
+                                </div>
+
+                                {num < totalSteps && (
+                                    <div className={`w-6 h-0.5 mx-1.5 rounded-full transition-colors ${step > num ? 'bg-emerald-500' : 'bg-slate-300'
+                                        }`} />
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
 
@@ -397,10 +421,10 @@ const UserForm = ({ formData, setFormData, onSave }) => {
                         </button>
                     ) : (
                         <ButtonGeneric
-                            label="Guardar Paciente"
                             onClick={onSaveInternal}
                             className="shadow-md"
-                        />
+                            variant="primary"
+                        >Guardar Paciente</ButtonGeneric>
                     )}
                 </div>
             </div>

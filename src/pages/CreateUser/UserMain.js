@@ -1,7 +1,7 @@
 // 1. React y librerías externas
 import React, { useEffect, useState } from 'react';
 // 2. Servicios y Utilidades (Capa de datos)
-import { getAllPatients, saveOrUpdatePatient, userService } from '@/services/user/UserService';
+import { createPatient, getAllPatients, saveOrUpdatePatient, userService } from '@/services/user/UserService';
 import { showToast } from '@/utils/showToast';
 // 3. Componentes de la aplicación
 import UserForm from '@/pages/CreateUser/UserForm';
